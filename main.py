@@ -22,7 +22,7 @@ def main():
         bindings = pybind11_autogen.wrap_header(header, header_file)
 
         bindings_file = pathlib.Path(
-            re.sub("src", "python/src", str(header_file))).with_suffix(".cpp")
+            re.sub("src/ipc", "python/src", str(header_file))).with_suffix(".cpp")
         print(f"Writing bindings to {bindings_file}")
         bindings_file.parent.mkdir(parents=True, exist_ok=True)
         with open(bindings_file, 'w') as f:

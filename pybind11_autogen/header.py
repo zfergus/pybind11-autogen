@@ -1,5 +1,3 @@
-import re
-
 import CppHeaderParser
 
 from .enum import wrap_enum
@@ -20,9 +18,9 @@ namespace py = pybind11;
 using namespace ipc;
 
 void define_{header_path.stem}(py::module_& m)
-{{
-REPLACE_ME
-}}
+{{{{
+{{}}
+}}}}
 """
 
     code = []
@@ -37,6 +35,4 @@ REPLACE_ME
 
     code.append(wrap_functions(header.functions, indent=" " * 8))
 
-    for line in code:
-        print(line)
-    return re.sub("REPLACE_ME", "\n".join(code), template)
+    return template.format("\n".join(code))

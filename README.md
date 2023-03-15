@@ -39,6 +39,7 @@ You can install all dependencies using `pip install -r requirements.txt`.
 
 * `enum class` are parsed as classes, not enums
 * inline doxygen comments (e.g., `///< @brief A brief description`) are not parsed correctly
+* templates types need to be manually specified
 
 If you find any other issues, please open an issue on GitHub.
 

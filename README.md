@@ -37,9 +37,11 @@ You can install all dependencies using `pip install -r requirements.txt`.
 
 ## Known Issues
 
+This project will get you around 90% (±90%) of the way to a complete binding of your C++ header, but there are some known issues (and probably some unknown ones) that will take some manual intervention. The following are known issues that may or may not be fixed in the future:
+
 * `enum class` are parsed as classes, not enums
 * inline doxygen comments (e.g., `///< @brief A brief description`) are not parsed correctly
-* templates types need to be manually specified
+* template types need to be manually specified
 
 If you find any other issues, please open an issue on GitHub.
 

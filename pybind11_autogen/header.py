@@ -12,14 +12,14 @@ def wrap_header(header, header_path):
 #include <pybind11/iostream.h>
 #include <pybind11/operators.h>
 
-#include <ipc/{header_path.parent.name}/{header_path.name}>
+#include <{header_path}>
 
 namespace py = pybind11;
-using namespace ipc;
+{{namespaces}}
 
 void define_{header_path.stem}(py::module_& m)
 {{{{
-{{}}
+{{code}}
 }}}}
 """
 
@@ -35,4 +35,9 @@ void define_{header_path.stem}(py::module_& m)
 
     code.append(wrap_functions(header.functions, indent=" " * 8))
 
-    return template.format("\n".join(code))
+    namespaces = [
+        f"using namespace {namespace};" for namespace in header.namespaces]
+
+    return template.format(
+        namespaces="\n".join(namespaces),
+        code="\n".join(code))

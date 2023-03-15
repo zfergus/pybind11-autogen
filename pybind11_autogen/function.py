@@ -2,10 +2,6 @@ import re
 
 import CppHeaderParser
 
-import re
-
-import CppHeaderParser
-
 from .doxygen import wrap_doxygen
 
 cpp_to_python_magic = {

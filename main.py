@@ -20,16 +20,20 @@ def main():
     for header_file in args.headers:
         print(f"Generating bindings for {header_file}")
 
-        header = CppHeaderParser.CppHeader(header_file)
+        with open(header_file, 'r') as f:
+            header_file_contents = f.read()
+        header_file_contents += "\n"  # trailing comment causes parsing error
+
+        header = CppHeaderParser.CppHeader(
+            header_file_contents, argType="string")
 
         rel_header_file = header_file.relative_to(
             args.include_root) if args.include_root else header_file
         bindings = pybind11_autogen.wrap_header(header, rel_header_file)
 
         bindings_file = pathlib.Path(
-            "python", "src", *rel_header_file.parts[1:]).with_suffix(".cpp")
+            "python", "src", *rel_header_file.parts[0:]).with_suffix(".cpp")
         print(f"Writing bindings to {bindings_file}")
-        breakpoint()
         bindings_file.parent.mkdir(parents=True, exist_ok=True)
         with open(bindings_file, 'w') as f:
             f.write(bindings)

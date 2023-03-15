@@ -27,4 +27,7 @@ def wrap_class(cclass: CppHeaderParser.CppHeaderParser.CppClass):
 
     code.append(";")
 
+    # Remove empty lines
+    code = [line for line in code if line.strip() != ""]
+
     return "\n".join(code)

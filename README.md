@@ -29,6 +29,12 @@ python ../main.py include/example.hpp -i include
 
 This will create a `example.cpp` file in `example/python/src` containing the bindings for the contents of `example.hpp`.
 
+## Dependencies
+
+This project use `CppHeaderParser` to parse the input C++ header files.
+
+You can install all dependencies using `pip install -r requirements.txt`.
+
 ## Known Issues
 
 * `enum class` are parsed as classes, not enums

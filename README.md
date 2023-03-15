@@ -1,6 +1,6 @@
 # pybind11-autogen
 
-[![License](https://img.shields.io/github/license/zfergus/pybind11-autogen.svg?color=blue)](https://github.com/zfergus/pybind11-autogen/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/zfergus/pybind11-autogen?color=blue)](https://github.com/zfergus/pybind11-autogen/blob/main/LICENSE)
 
 Automatically generate pybind11 source from a C++ header.
 

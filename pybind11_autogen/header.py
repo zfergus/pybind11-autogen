@@ -12,6 +12,8 @@ def wrap_header(header, header_path):
 #include <pybind11/stl.h>
 #include <pybind11/iostream.h>
 #include <pybind11/operators.h>
+#include <pybind11/eigen.h>
+#include <pybind11/functional.h>
 
 #include <{header_path}>
 

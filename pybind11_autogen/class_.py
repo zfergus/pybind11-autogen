@@ -15,17 +15,23 @@ def wrap_class(cclass: CppHeaderParser.CppHeaderParser.CppClass):
     code = [f'py::class_<{cclass["name"]}{parents}>(m, "{cclass["name"]}")']
 
     code.append(wrap_functions(
-        cclass["methods"]["public"],
+        [func for func in cclass["methods"]["public"] if not func["friend"]],
         prefix=f'{cclass["name"]}::',
         indent=indent,
         self=cclass["name"]))
 
     for prop in cclass["properties"]["public"]:
         docstring = wrap_doxygen(prop.get("doxygen", ""), indent=indent)
-        code.append(f".def_readwrite(\
-\"{prop['name']}\", &{cclass['name']}::{prop['name']}, {docstring})")
+        args = [f'"{prop["name"]}"', f"&{cclass['name']}::{prop['name']}"]
+        if docstring != '""':
+            args.append(docstring)
+        code.append(f".def_readwrite({', '.join(args)})")
 
     code.append(";")
+
+    # Wrap friend functions
+    code.append(wrap_functions(
+        [func for func in cclass["methods"]["public"] if func["friend"]]))
 
     # Remove empty lines
     code = [line for line in code if line.strip() != ""]

@@ -8,15 +8,24 @@ def strip_doxygen_line(line):
 
 
 def doxygen_to_docstring(doxygen, indent=""):
-
     brief = None
     extra = []
     params = []
     returns = []
     notes = []
     lines = doxygen.split("\n")
+    maths = []
+    is_math = False
     for line in lines:
-        if line.startswith("/// @param"):
+        if is_math:
+            line = strip_doxygen_line(line)
+            if line.endswith("\\f\\]"):
+                line = line.replace("\\f\\]", "")
+                is_math = False
+            if len(line) > 0:
+                maths[-1].append(line)
+            continue
+        elif line.startswith("/// @param"):
             if line.startswith("/// @param[out]"):
                 line = strip_doxygen_line(line)
                 returns.append(line[line.index(" "):].strip())
@@ -29,6 +38,11 @@ def doxygen_to_docstring(doxygen, indent=""):
             brief = strip_doxygen_line(line)
         elif line.startswith("/// @note"):
             notes.append(strip_doxygen_line(line))
+        elif line.startswith("/// \\f\\["):
+            maths.append([strip_doxygen_line(line).replace("\\f\\[", ".. math::\n")])
+            is_math = not line.endswith("\\f\\]")
+        elif line == "///":
+            pass
         elif len(line.strip()) > 0:
             extra.append(strip_doxygen_line(line))
 
@@ -37,6 +51,10 @@ def doxygen_to_docstring(doxygen, indent=""):
     lines = []
     if brief is not None:
         lines.append(indent + brief)
+        lines.append("")
+    if maths:
+        for math in maths:
+            lines.append(f"{indent}" + f"\n{indent}{tab}".join(math))
         lines.append("")
     if notes:
         lines.append(f"{indent}Note{'s' if len(notes) > 1 else ''}:")
@@ -55,6 +73,9 @@ def doxygen_to_docstring(doxygen, indent=""):
             lines.append(f"{indent}{tab}Tuple of:")
         lines.extend(f"{indent}{tab}{r}" for r in returns)
         lines.append("")
+
+    lines = [line.rstrip(" ") for line in lines]
+    lines = [re.sub("\\\\f\\$(.*)\\\\f\\$", ":math:`\g<1>`", line) for line in lines]
 
     return "\n".join(lines)
 

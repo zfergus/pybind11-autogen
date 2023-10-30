@@ -6,14 +6,9 @@ from .class_ import wrap_class
 from .function import wrap_functions
 
 
-def wrap_header(header, header_path):
+def wrap_header(header, header_path, common_include=None):
     template = f"""\
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/iostream.h>
-#include <pybind11/operators.h>
-#include <pybind11/eigen.h>
-#include <pybind11/functional.h>
+{{includes}}
 
 #include <{header_path}>
 
@@ -26,9 +21,22 @@ void define_{header_path.stem}(py::module_& m)
 }}}}
 """
 
+    if common_include:
+        includes = f"#include <{common_include}>"
+    else:
+        includes = """\
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/iostream.h>
+#include <pybind11/operators.h>
+#include <pybind11/eigen.h>
+#include <pybind11/functional.h>"""
+
     code = []
 
     for enum in header.enums:
+        if "name" not in enum:
+            continue # skip enum class
         code.append(wrap_enum(enum))
         code.append("")
 
@@ -46,5 +54,6 @@ void define_{header_path.stem}(py::module_& m)
         f"using namespace {namespace};" for namespace in header.namespaces]
 
     return template.format(
+        includes=includes,
         namespaces="\n".join(namespaces),
         code="\n".join(code))

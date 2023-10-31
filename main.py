@@ -26,15 +26,19 @@ def main():
             header_file_contents = f.read()
         header_file_contents += "\n"  # trailing comment causes parsing error
 
+        CppHeaderParser.Resolver.NAMESPACES = []  # Clear cached namespaces
         header = CppHeaderParser.CppHeader(
             header_file_contents, argType="string")
 
         if not any((header.enums, header.variables, header.classes, header.functions)):
-            print(f"Skipping {header_file} - no enums, variables, classes, or functions")
+            print(
+                f"Skipping {header_file} - no enums, variables, classes, or functions")
             continue
 
-        rel_header_file = header_file.relative_to(args.include_root) if args.include_root else header_file
-        bindings = pybind11_autogen.wrap_header(header, rel_header_file, common_include=args.common_include)
+        rel_header_file = header_file.relative_to(
+            args.include_root) if args.include_root else header_file
+        bindings = pybind11_autogen.wrap_header(
+            header, rel_header_file, common_include=args.common_include)
 
         bindings_file = pathlib.Path(
             "python", "src", *rel_header_file.parts[1:]).with_suffix(".cpp")

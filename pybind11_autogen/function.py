@@ -85,7 +85,7 @@ def generate_lambda_function(func, self=None):
     args = ", ".join(param["name"] for param in func["parameters"])
 
     lambda_params = ",".join(
-        ([f"{self}& self"] if self else [])
+        ([f"{'const ' if func['const'] else ''}{self}& self"] if self else [])
         + [f'{p["type"]} {p["name"]}{wrap_parameter_default(p)}' for p in in_params])
     return_param_decls = "\n".join(
         f'{p["type"][:-1]} {p["name"]};' for p in out_params)
@@ -128,7 +128,6 @@ def wrap_function(func, prefix="", indent="", overloaded=False, self=None, name=
         args = [f'"{name}"', f"&{prefix}{name}"]
         if docstring != '""':
             args.append(docstring)
-        print(args)
         return f".def_readwrite({', '.join(args)})"
 
     params = wrap_parameters(

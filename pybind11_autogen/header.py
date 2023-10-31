@@ -36,11 +36,13 @@ void define_{header_path.stem}(py::module_& m)
 
     for enum in header.enums:
         if "name" not in enum:
-            continue # skip enum class
+            continue  # skip enum class
         code.append(wrap_enum(enum))
         code.append("")
 
     for var in header.variables:
+        if "using" in var["aliases"]:
+            continue
         code.append(wrap_variable(var))
         code.append("")
 

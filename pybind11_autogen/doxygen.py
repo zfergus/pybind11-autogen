@@ -39,7 +39,8 @@ def doxygen_to_docstring(doxygen, indent=""):
         elif line.startswith("/// @note"):
             notes.append(strip_doxygen_line(line))
         elif line.startswith("/// \\f\\["):
-            maths.append([strip_doxygen_line(line).replace("\\f\\[", ".. math::\n")])
+            maths.append([strip_doxygen_line(
+                line).replace("\\f\\[", ".. math::\n")])
             is_math = not line.endswith("\\f\\]")
         elif line == "///":
             pass
@@ -75,7 +76,8 @@ def doxygen_to_docstring(doxygen, indent=""):
         lines.append("")
 
     lines = [line.rstrip(" ") for line in lines]
-    lines = [re.sub("\\\\f\\$(.*)\\\\f\\$", ":math:`\g<1>`", line) for line in lines]
+    lines = [re.sub("\\\\f\\$(.*)\\\\f\\$", ":math:`\g<1>`", line)
+             for line in lines]
 
     return "\n".join(lines)
 

@@ -43,6 +43,10 @@ This project will get you around 90% (±90%) of the way to a complete binding of
 * inline doxygen comments (e.g., `///< @brief A brief description`) are not parsed correctly
 * template types need to be manually specified
 * ignores `#ifdef`/`#ifndef` directives
+* adds `init` to virtual classes
+* overriden `operator[]` with `const` is not handled correctly
+* `.def_property` is only generated for accessors with the name `variable()` and `set_variable(new_value)`
+* `enum` inside a class is not handled correctly
 
 If you find any other issues, please open an issue on GitHub.
 

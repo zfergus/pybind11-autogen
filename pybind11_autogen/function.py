@@ -144,11 +144,12 @@ def wrap_function(func, prefix="", indent="", overloaded=False, self=None, name=
         return f".def({', '.join(args)})"
 
     if has_output_parameters(func["parameters"]):
-        func_address = generate_lambda_function(func, None if func["static"] else self)
+        func_address = generate_lambda_function(
+            func, None if func["static"] else self)
     else:
         func_address = f'&{prefix}{func["name"]}'
         if overloaded:
-            func_address = f"py::overload_cast<{param_types}>({func_address})"
+            func_address = f"py::overload_cast<{param_types}>({func_address}{', py::const_' if func['const'] else ''})"
 
     if name is None:
         name = func["name"]

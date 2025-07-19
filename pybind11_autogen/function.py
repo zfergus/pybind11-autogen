@@ -57,7 +57,7 @@ def wrap_parameter_default(param):
 
 
 def wrap_parameters(params: list[CppHeaderParser.CppHeaderParser.CppVariable]):
-    return ", ".join(f'py::arg("{param["name"].lstrip("_")}"){wrap_parameter_default(param)}' for param in params)
+    return ", ".join(f'"{param["name"].lstrip("_")}"_a{wrap_parameter_default(param)}' for param in params)
 
 
 def is_out_param(param):

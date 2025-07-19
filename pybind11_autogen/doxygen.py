@@ -4,7 +4,7 @@ import CppHeaderParser
 
 
 def strip_doxygen_line(line):
-    return re.sub("/// (@[a-z\[\]]*)?", "", line.strip()).strip()
+    return re.sub(r"/// (@[a-z\[\]]*)?", "", line.strip()).strip()
 
 
 def doxygen_to_docstring(doxygen, indent=""):
@@ -76,7 +76,7 @@ def doxygen_to_docstring(doxygen, indent=""):
         lines.append("")
 
     lines = [line.rstrip(" ") for line in lines]
-    lines = [re.sub("\\\\f\\$(.*)\\\\f\\$", ":math:`\g<1>`", line)
+    lines = [re.sub(r"\\f\$(.*)\\f\$", r":math:`\g<1>`", line)
              for line in lines]
 
     return "\n".join(lines)
